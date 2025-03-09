@@ -13,6 +13,10 @@ RUN curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
 	&& apt update \
 	&& apt install ngrok
 
+RUN git clone https://github.com/ingydotnet/git-subrepo /git-subrepo
+RUN echo 'source /git-subrepo/.rc' >> ~/.bashrc
+
+
 # Set working directory inside the container
 WORKDIR /workspace
 
