@@ -1,0 +1,29 @@
+{
+	"name": "Python",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspace",
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.shell.linux": "/bin/bash"
+			},
+			"extensions": [
+				"ms-python.python",
+				"ms-python.autopep8",
+				"ms-toolsai.jupyter", // Optional: if you're working with Jupyter Notebooks
+				"ms-python.pylance", // For advanced Python language support and IntelliSense
+				"donjayamanne.python-environment-manager", // Manage virtual environments
+				"magicstack.MagicPython", // Better syntax highlighting for Python
+				"thomasdijkstra.vscode-python-test-adapter", // Test explorer integration
+				"esbenp.prettier-vscode", // Code formatting for multiple languages (including Python)
+				"vscode-icons-team.vscode-icons", // Icon set to help distinguish files easily,
+				"ms-python.pylint"
+			]
+		}
+	},
+	"forwardPorts": [
+		// Example port, uncomment and modify if needed
+		// 8000
+	]
+}
