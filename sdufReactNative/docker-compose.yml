@@ -1,0 +1,22 @@
+services:
+  reactnative:
+    container_name: ${SOCKET_PROJECT_ID}
+    oom_kill_disable: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      APP_ENV: ${APP_ENV}
+      URL: ${URL}
+      SOCKET_PROJECT_TOKEN: ${SOCKET_PROJECT_TOKEN}
+      SOCKET_PROJECT_ID: ${SOCKET_PROJECT_ID}
+      styleURL: ${styleURL}
+      APP_NAME: ${APP_NAME}
+      APP_PACKAGE_NAME: ${APP_PACKAGE_NAME}
+    volumes:
+      - ./node_modules:/app/node_modules
+      - ./shared:/shared
+    working_dir: /app
+    cpus: '3.0'
+    mem_limit: 6G
+    memswap_limit: 8G
