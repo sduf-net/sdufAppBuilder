@@ -16,7 +16,9 @@ RUN curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
 RUN git clone https://github.com/ingydotnet/git-subrepo /git-subrepo
 RUN echo 'source /git-subrepo/.rc' >> ~/.bashrc
 
-
+RUN curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+# Expose Docker socket to allow Docker-in-Docker to work
+VOLUME /var/run/docker.sock:/var/run/docker.sock
 # Set working directory inside the container
 WORKDIR /workspace
 
