@@ -1,6 +1,6 @@
 import os
 import subprocess
-from fastapi import FastAPI
+from fastapi import FastAPI, BackgroundTasks
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -61,6 +61,7 @@ def execute_build(platform: str, body: ProjectEnvVarsRequest):
         f.write("")
 
     logs = run_command(command, cwd="sdufReactNative")
+    
     with open(log_file, "a", encoding="utf-8") as f:
         f.write(logs)
 
@@ -68,14 +69,14 @@ def execute_build(platform: str, body: ProjectEnvVarsRequest):
 
 
 @app.post("/build/{platform}")
-def trigger_build(platform: str, body: ProjectEnvVarsRequest):
+def trigger_build(platform: str, body: ProjectEnvVarsRequest, background_tasks: BackgroundTasks):
     """Trigger a build for a given project on a specified platform."""
 
     if platform not in ["android", "ios"]:
         return {"error": "Invalid platform. Use 'android' or 'ios'."}
 
-    logs = execute_build(platform, body)
-    return {"message": f"Build for project {body.socket_project_id} ({platform}) started", "logs": logs}
+    background_tasks.add_task(execute_build, platform, body)
+    return {"message": f"Build for project {body.socket_project_id} ({platform}) started"}
 
 
 @app.get("/logs/{project_id}")
