@@ -17,14 +17,26 @@ class ProjectEnvVarsRequest(BaseModel):
     app_package_name: str
 
 
-def run_command(command, cwd=None, env=None):
-    """Run a shell command and capture output."""
-    try:
-        result = subprocess.run(command, shell=True, check=True,
-                                cwd=cwd, capture_output=True, text=True, env=env)
-        return result.stdout + result.stderr
-    except subprocess.CalledProcessError as e:
-        return f"Error: {e.output}"
+def run_command(command, log_file, cwd=None, env=None):
+    """Run a shell command and write output to a file in real-time."""
+    with open(log_file, "w", encoding="utf-8") as f:
+        process = subprocess.Popen(
+            command, shell=True, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, 
+            text=True, env=env
+        )
+
+        # Read line by line and write in real-time
+        for line in process.stdout:
+            print(line, end="")  # Also print to console
+            f.write(line)
+            f.flush()  # Ensure it's written immediately
+
+        process.wait()  # Wait for process to finish
+        return_code = process.returncode
+        if return_code != 0:
+            return f"Error: Process exited with code {return_code}"
+
+    return "Command executed successfully."
 
 
 def execute_build(platform: str, body: ProjectEnvVarsRequest):
@@ -57,15 +69,9 @@ def execute_build(platform: str, body: ProjectEnvVarsRequest):
 
     log_file = f"logs/{project['id']}_log.txt"
     os.makedirs("logs", exist_ok=True)
-    with open(log_file, "w", encoding="utf-8") as f:
-        f.write("")
 
-    logs = run_command(command, cwd="sdufReactNative")
-    
-    with open(log_file, "a", encoding="utf-8") as f:
-        f.write(logs)
-
-    return logs
+    # Run command with real-time logging
+    return run_command(command, log_file, cwd="sdufReactNative")
 
 
 @app.post("/build/{platform}")
