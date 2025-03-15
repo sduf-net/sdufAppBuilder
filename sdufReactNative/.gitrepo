@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:sduf-net/sdufReactNative.git
 	branch = main
-	commit = 03d6fedf6d1ca82cae540bd7fb820b3cb4bf4da2
-	parent = d329791d5235a4e66bbcfd4cb2c39a508cc36b4b
+	commit = 473cc13930a19061da482fcb444505a6d40a3642
+	parent = 3d4478879c848a445a5ef3d36a0fc2b5944e2e4c
 	method = merge
 	cmdver = 0.4.9
